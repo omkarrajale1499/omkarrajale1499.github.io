@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Omkar Rajale | Software Engineer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg: #0a0a0c;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.08);
+            --accent: #a29bfe;
+            --text: #ededed;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+        
+        body { 
+            background-color: var(--bg); 
+            color: var(--text); 
+            font-family: 'Geist', sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; 
+            pointer-events: none; 
+        }
+
+        nav {
+            position: fixed; top: 0; width: 100%; padding: 20px 8%;
+            background: rgba(10, 10, 12, 0.8); backdrop-filter: blur(15px);
+            display: flex; justify-content: space-between; align-items: center; z-index: 1000;
+            border-bottom: 1px solid var(--border);
+        }
+        nav a { color: var(--text); text-decoration: none; margin-left: 20px; font-size: 0.9rem; opacity: 0.7; transition: 0.3s; }
+        nav a:hover { opacity: 1; color: var(--accent); }
+
+        section { 
+            position: relative; 
+            padding: 100px 8%; 
+            max-width: 1400px; 
+            margin: 0 auto; 
+            z-index: 1; 
+        }
+
+        .hero-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 60px;
+            padding: 80px 0;
+        }
+        .hero-content { flex: 1.5; }
+        .hero-content h1 { font-size: 4rem; font-weight: 900; line-height: 1; margin-bottom: 20px; }
+        
+        .hero-image { flex: 1; display: flex; justify-content: center; }
+        .profile-frame {
+            width: 320px;
+            height: 320px;
+            border-radius: 50%;
+            border: 3px solid var(--accent);
+            overflow: hidden;
+            box-shadow: 0 0 30px rgba(162, 155, 254, 0.2);
+            background: var(--bg);
+        }
+        .profile-frame img { width: 100%; height: 100%; object-fit: cover; }
+
+        .container-flex { display: flex; gap: 60px; align-items: flex-start; }
+        .section-title { flex: 1; position: sticky; top: 120px; }
+        .section-content { flex: 2; }
+        h2 { font-size: 2.5rem; margin-bottom: 15px; }
+        .accent-line { width: 40px; height: 4px; background: var(--accent); margin-bottom: 20px; }
+
+        .card { 
+            background: var(--card-bg); 
+            border: 1px solid var(--border); 
+            padding: 30px; 
+            border-radius: 20px; 
+            margin-bottom: 20px;
+            transition: 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+        .card:hover { 
+            border-color: var(--accent); 
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .card h3 { color: var(--accent); margin-bottom: 10px; }
+        .date { font-size: 0.8rem; opacity: 0.5; margin-bottom: 10px; display: block; }
+
+        /* --- Project Horizontal Scroll Styles --- */
+        .project-row {
+            display: flex;
+            overflow-x: auto;
+            gap: 25px;
+            padding: 20px 0 40px 0;
+            scrollbar-width: thin;
+            scrollbar-color: var(--accent) transparent;
+        }
+
+        .project-row::-webkit-scrollbar {
+            height: 6px;
+        }
+        .project-row::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 10px;
+        }
+
+        .project-card {
+            flex: 0 0 380px; /* Fixed width for cards in scroll */
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .project-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .project-img {
+            width: 100%;
+            height: 200px;
+            background: #1a1a1e; /* Placeholder background */
+            overflow: hidden;
+        }
+
+        .project-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.8;
+            transition: 0.3s;
+        }
+
+        .project-card:hover .project-img img {
+            opacity: 1;
+            transform: scale(1.05);
+        }
+
+        .project-info {
+            padding: 25px;
+        }
+        /* --- End Project Styles --- */
+        
+        .btn { 
+            display: inline-block; padding: 12px 28px; background: var(--accent); color: #000; 
+            text-decoration: none; border-radius: 12px; font-weight: bold; margin-top: 20px;
+            transition: 0.3s;
+        }
+        .btn:hover { transform: scale(1.05); box-shadow: 0 5px 15px rgba(162, 155, 254, 0.4); }
+
+        @media (max-width: 950px) {
+            .hero-container, .container-flex { flex-direction: column; text-align: center; }
+            .section-title { position: static; }
+            .hero-container { flex-direction: column-reverse; }
+            .project-card { flex: 0 0 300px; }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="bg-canvas"></canvas>
+
+    <nav>
+        <div style="font-weight: 900;">OMKAR RAJALE</div>
+        <div>
+            <a href="#home">Home</a>
+            <a href="#experience">Experience</a>
+            <a href="#projects">Projects</a>
+            <a href="#education">Education</a>
+            <a href="#connect">Connect</a>
+        </div>
+    </nav>
+
+    <section id="home">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1>Data Science & <br><span style="color: var(--accent)">AI Enthusiast.</span></h1>
+                <p style="font-size: 1.2rem; opacity: 0.7;">Software Engineer focused on Generative AI, machine learning, and data-driven innovation. I design LLM-powered applications, predictive models, and scalable data platforms to solve real-world problems, and I am currently pursuing an M.S. in Applied Data Intelligence.</p>
+                <a href="Omkar_Rajale_Resume-2026.pdf" download class="btn">Download Resume</a>
+            </div>
+            <div class="hero-image">
+                <div class="profile-frame">
+                    <img src="C:\Omkar\portfolio_website\Omkar.png" alt="Omkar Rajale">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="experience">
+        <div class="container-flex">
+            <div class="section-title">
+                <div class="accent-line"></div>
+                <h2>Experience</h2>
+            </div>
+            <div class="section-content">
+                <div class="card">
+                    <span class="date">Apr 2024 – Dec 2024 </span>
+                    <h3>Data Scientist | Nitor Infotech </h3>
+                    <p>Designed and deployed Generative AI applications using LLMs, and built scalable data pipelines on Azure Databricks and Delta Lake to process high-volume structured and unstructured data. Collaborated cross-functionally to optimize data ingestion and retrieval, improving model performance and system efficiency.</p>
+                </div>
+                <div class="card">
+                    <span class="date">Sep 2022 – Nov 2023 </span>
+                    <h3>Software Engineer | HCL Technologies </h3>
+                    <p>Implemented machine learning–driven predictive intelligence models to classify and forecast support incidents, reducing manual processes by 30% through workflow automation and improving incident detection performance.</p>
+                </div>
+                <div class="card">
+                    <span class="date">Aug 2021 – May 2022 </span>
+                    <h3>Software Engineer | FIS Global </h3>
+                    <p>Applied regression and optimization techniques for financial data forecasting and onboarding analytics. Automated data integration workflows, improving efficiency by 25%, and delivered AI-driven insights using cloud-based data storage and analytics platforms.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects">
+        <div class="accent-line"></div>
+        <h2 style="margin-bottom: 30px;">Projects</h2>
+        
+        <div class="project-row">
+            <div class="project-card">
+                <div class="project-img">
+                    <img src="C:\Omkar\portfolio_website\Project-1.png" alt="Urban Air Analytics"> </div>
+                <div class="project-info">
+                    <h3>Urban Air Analytics Platform</h3>
+                    <p>Built an end-to-end modern data stack for real-time air quality intelligence using automated ingestion, transformations, and ML pipelines. The platform predicts next-hour AQI, detects anomalies, and delivers insights through Power BI.</p>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-img">
+                    <img src="C:\Omkar\portfolio_website\Project-2.png" alt="Traffic Sign Recognition"> </div>
+                <div class="project-info">
+                    <h3>Traffic Sign Recognition</h3>
+                    <p>Developed a CNN-based deep learning model with transfer learning to classify traffic signs with 95% accuracy. Optimized performance using data augmentation and hyperparameter tuning, targeting real-world autonomous driving use cases.</p>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-img">
+                    <img src="C:\Omkar\portfolio_website\Project-3.png" alt="Titanic Survival"> </div>
+                <div class="project-info">
+                    <h3>Titanic Survival Prediction 🚢</h3>
+                    <p>Implemented multiple supervised machine learning models to predict survival outcomes with ~82% accuracy. Performed feature engineering, data preprocessing, and visualized key insights using Tableau to support data-driven decision-making.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="education">
+        <div class="container-flex">
+            <div class="section-title">
+                <div class="accent-line"></div>
+                <h2>Education</h2>
+            </div>
+            <div class="section-content">
+                <div class="card">
+                    <h3>MS in Applied Data Intelligence</h3>
+                    <p>San Jose State University, California.</p>
+                    <span class="date">Expected Graduation: Dec 2026 </span>
+                </div>
+                <div class="card">
+                    <h3>BE in Computer Engineering</h3>
+                    <p>AISSMS COE, Pune, India.</p>
+                    <span class="date">Graduated: Jul 2021 </span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer id="connect" style="padding: 100px 8%; text-align: center; border-top: 1px solid var(--border);">
+        <p style="opacity: 0.5;">omkar.rajale@gmail.com • Milpitas, California </p>
+        <div style="margin-top: 20px;">
+            <a href="https://www.linkedin.com/in/omkarrajale14/" style="color: var(--accent); margin: 0 15px; text-decoration: none;">LinkedIn</a>
+            <a href="https://github.com/omkarrajale1499" style="color: var(--accent); margin: 0 15px; text-decoration: none;">GitHub</a>
+        </div>
+    </footer>
+
+    <script>
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let mouse = { x: null, y: null, radius: 150 };
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        window.addEventListener('resize', resize);
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.x;
+            mouse.y = e.y;
+        });
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 1;
+                this.speedX = Math.random() * 0.5 - 0.25;
+                this.speedY = Math.random() * 0.5 - 0.25;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                if (this.x > canvas.width) this.x = 0;
+                else if (this.x < 0) this.x = canvas.width;
+                if (this.y > canvas.height) this.y = 0;
+                else if (this.y < 0) this.y = canvas.height;
+            }
+            draw() {
+                ctx.fillStyle = 'rgba(162, 155, 254, 0.5)';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function init() {
+            particles = [];
+            let numberOfParticles = (canvas.width * canvas.height) / 9000;
+            for (let i = 0; i < numberOfParticles; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function connect() {
+            for (let a = 0; a < particles.length; a++) {
+                for (let b = a; b < particles.length; b++) {
+                    let dx = particles[a].x - particles[b].x;
+                    let dy = particles[a].y - particles[b].y;
+                    let distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < 100) {
+                        let opacity = 1 - (distance / 100);
+                        ctx.strokeStyle = `rgba(162, 155, 254, ${opacity * 0.2})`;
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[a].x, particles[a].y);
+                        ctx.lineTo(particles[b].x, particles[b].y);
+                        ctx.stroke();
+                    }
+                }
+                
+                let mdx = particles[a].x - mouse.x;
+                let mdy = particles[a].y - mouse.y;
+                let mDistance = Math.sqrt(mdx * mdx + mdy * mdy);
+                if (mDistance < mouse.radius) {
+                    let mOpacity = 1 - (mDistance / mouse.radius);
+                    ctx.strokeStyle = `rgba(162, 155, 254, ${mOpacity * 0.4})`;
+                    ctx.beginPath();
+                    ctx.moveTo(particles[a].x, particles[a].y);
+                    ctx.lineTo(mouse.x, mouse.y);
+                    ctx.stroke();
+                }
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+            }
+            connect();
+            requestAnimationFrame(animate);
+        }
+
+        resize();
+        init();
+        animate();
+    </script>
+</body>
+</html>
